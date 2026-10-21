@@ -63,7 +63,9 @@ def put(key):
 def get(key):
     value = get_value(key)
     if value is None:
+        app.logger.warning("GET: key NOT FOUND (key: %s)", key)
         return {"error": "GET: key NOT FOUND"}, 404
+    app.logger.info("GET: Successfully got (key: %s, value: %s)", key, value)
     return jsonify({"key":key, "value":value})
 
 @app.route('/<string:key>', methods=["DELETE"])
