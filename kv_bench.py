@@ -13,8 +13,8 @@ import time
 import requests
 
 BASE_URL = 'http://127.0.0.1:5000'
-NUM_THREADS = 3
-OPS_PER_THREAD = 100
+NUM_THREADS = 10
+OPS_PER_THREAD = 1000
 NUM_KEYS = NUM_THREADS * OPS_PER_THREAD   # keys per phase
 PRINT_INTERVAL = 3                        # seconds between intermediate reports
 MAX_LOGGED_PROBLEMS = 5                   # print the first few errors/mismatches, count the rest

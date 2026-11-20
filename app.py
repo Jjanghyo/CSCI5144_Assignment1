@@ -1,4 +1,4 @@
-import sqlite3, logging
+import sqlite3, logging, os
 from flask import Flask, render_template, request, jsonify
 from jinja2 import Environment, FileSystemLoader
 
@@ -8,7 +8,7 @@ env = Environment(loader=FileSystemLoader("templates"))
 app.logger.setLevel(logging.INFO)
 
 def get_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(os.getenv("DB_PATH"))
     return conn
 
 def init_db():
@@ -75,4 +75,4 @@ def delete(key):
 
 if __name__ == "__main__":
     init_db()
-    app.run()
+    app.run(host="0.0.0.0", port=os.getenv("PORT"))

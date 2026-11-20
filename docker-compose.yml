@@ -1,0 +1,49 @@
+
+# Configuratoin File
+services:
+  kv-store-1:
+    build: .
+    command: uv run --no-sync python app.py
+    environment:
+      DB_PATH: /app/data/database1.db
+      PORT: 5001
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./data/store1:/app/data
+
+  kv-store-2:
+    build: .
+    command: uv run --no-sync python app.py
+    environment:
+      DB_PATH: /app/data/database2.db
+      PORT: 5002
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./data/store2:/app/data
+
+  kv-store-3:
+    build: .
+    command: uv run --no-sync python app.py
+    environment:
+      DB_PATH: /app/data/database3.db
+      PORT: 5003
+    ports:
+      - "5003:5003"
+    volumes:
+      - ./data/store3:/app/data
+
+  router:
+    build: .
+    command: uv run --no-sync gunicorn --bind 0.0.0.0:5000 --workers 1 --worker-class gthread --threads 10 --keep-alive 5 router:app
+    environment:
+      PORT: 5000
+      # What servers you want to use
+      KV_SERVERS: http://kv-store-1:5001,http://kv-store-2:5002,http://kv-store-3:5003
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kv-store-1
+      - kv-store-2
+      - kv-store-3
